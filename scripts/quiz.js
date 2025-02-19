@@ -15,7 +15,6 @@ let answers_found = 0;
 let greeting;
 let question;
 let answer_divs = document.getElementsByClassName('answer_div');
-let answer_correctness_button = document.getElementById("answer_correctness_button");
 function start_quiz() {
     greeting = document.createElement('a');
     greeting.innerText = `Χαίρετε ${person_name}!`;
@@ -31,14 +30,21 @@ function start_quiz() {
     }
 }
 function answer(new_answer) {
+    let button_to_change = document.getElementById(`answer${new_answer}_div`);
     if (new_answer == correct_answers[current_question]) {
-        answer_correctness_button.innerText = `CORRECT!`;
-        answer_correctness_button.style.backgroundColor = `#709344`;
+        button_to_change.style.backgroundColor = `#709344`;
+        setTimeout(() => {
+            button_to_change.style.transitionDuration = `1000ms`;
+            button_to_change.style.backgroundColor = `white`;
+        }, 500);
         answers_found += 1;
     }
     else {
-        answer_correctness_button.innerText = `False :(`;
-        answer_correctness_button.style.backgroundColor = `#934944`;
+        button_to_change.style.backgroundColor = `#934944`;
+        setTimeout(() => {
+            button_to_change.style.transitionDuration = `1000ms`;
+            button_to_change.style.backgroundColor = `white`;
+        }, 500);
     }
     current_question += 1;
     if (current_question >= correct_answers.length) {
@@ -49,8 +55,6 @@ function answer(new_answer) {
     for (let i = 0; i < 4; i++) {
         document.getElementById(`answer${i}`).innerText = answers[current_question][i];
     }
-    answer_correctness_button.style.opacity = 1;
-    answer_correctness_button.style.pointerEvents = `all`;
 }
 for (let i = 0; i < 4; i++) {
     document.getElementById(`answer${i}_div`).addEventListener("mousedown", () => {
@@ -63,10 +67,4 @@ function end_quiz() {
     quiz_introduction.appendChild(score_text);
     question.innerHTML = `Score: ${answers_found} / ${correct_answers.length}`;
     greeting.remove();
-    answer_correctness_button.style.opacity = 0;
-    answer_correctness_button.style.pointerEvents = `none`;
 }
-document.getElementById(`answer_correctness_button`).addEventListener("mousedown", () => {
-    answer_correctness_button.style.opacity = 0;
-    answer_correctness_button.style.pointerEvents = `none`;
-});
